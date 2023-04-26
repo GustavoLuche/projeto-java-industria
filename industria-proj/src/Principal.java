@@ -19,9 +19,11 @@ public class Principal {
 
     private static final BigDecimal SALARIO_MINIMO = BigDecimal.valueOf(1212.00);
     private static final List<Funcionario> FUNCIONARIOS = new ArrayList<>();
-
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    private static final NumberFormat CURRENCY_FORMATTER = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+    
     public static void main(String[] args) throws UnsupportedEncodingException {
-
+        
         System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8.name()));
 
         inserirFuncionarios();
@@ -44,26 +46,16 @@ public class Principal {
     }
 
     private static void inserirFuncionarios() {
-        FUNCIONARIOS
-                .add(new Funcionario("Maria", LocalDate.parse("2000-10-18"), BigDecimal.valueOf(2009.44), "Operador"));
-        FUNCIONARIOS
-                .add(new Funcionario("João", LocalDate.parse("1990-05-12"), BigDecimal.valueOf(2284.38), "Operador"));
-        FUNCIONARIOS.add(
-                new Funcionario("Caio", LocalDate.parse("1961-05-02"), BigDecimal.valueOf(9836.14), "Coordenador"));
-        FUNCIONARIOS
-                .add(new Funcionario("Miguel", LocalDate.parse("1988-10-14"), BigDecimal.valueOf(19119.88), "Diretor"));
-        FUNCIONARIOS.add(
-                new Funcionario("Alice", LocalDate.parse("1995-01-05"), BigDecimal.valueOf(2234.68), "Recepcionista"));
-        FUNCIONARIOS
-                .add(new Funcionario("Heitor", LocalDate.parse("1999-11-19"), BigDecimal.valueOf(1582.72), "Operador"));
-        FUNCIONARIOS
-                .add(new Funcionario("Arthur", LocalDate.parse("1993-03-31"), BigDecimal.valueOf(4071.84), "Contador"));
-        FUNCIONARIOS
-                .add(new Funcionario("Laura", LocalDate.parse("1994-07-08"), BigDecimal.valueOf(3017.45), "Gerente"));
-        FUNCIONARIOS.add(
-                new Funcionario("Heloísa", LocalDate.parse("2003-05-24"), BigDecimal.valueOf(1606.85), "Eletricista"));
-        FUNCIONARIOS
-                .add(new Funcionario("Helena", LocalDate.parse("1996-09-02"), BigDecimal.valueOf(2799.93), "Gerente"));
+        FUNCIONARIOS.add(new Funcionario("Maria", LocalDate.parse("2000-10-18"), BigDecimal.valueOf(2009.44), "Operador"));
+        FUNCIONARIOS.add(new Funcionario("João", LocalDate.parse("1990-05-12"), BigDecimal.valueOf(2284.38), "Operador"));
+        FUNCIONARIOS.add(new Funcionario("Caio", LocalDate.parse("1961-05-02"), BigDecimal.valueOf(9836.14), "Coordenador"));
+        FUNCIONARIOS.add(new Funcionario("Miguel", LocalDate.parse("1988-10-14"), BigDecimal.valueOf(19119.88), "Diretor"));
+        FUNCIONARIOS.add(new Funcionario("Alice", LocalDate.parse("1995-01-05"), BigDecimal.valueOf(2234.68), "Recepcionista"));
+        FUNCIONARIOS.add(new Funcionario("Heitor", LocalDate.parse("1999-11-19"), BigDecimal.valueOf(1582.72), "Operador"));
+        FUNCIONARIOS.add(new Funcionario("Arthur", LocalDate.parse("1993-03-31"), BigDecimal.valueOf(4071.84), "Contador"));
+        FUNCIONARIOS.add(new Funcionario("Laura", LocalDate.parse("1994-07-08"), BigDecimal.valueOf(3017.45), "Gerente"));
+        FUNCIONARIOS.add(new Funcionario("Heloísa", LocalDate.parse("2003-05-24"), BigDecimal.valueOf(1606.85), "Eletricista"));
+        FUNCIONARIOS.add(new Funcionario("Helena", LocalDate.parse("1996-09-02"), BigDecimal.valueOf(2799.93), "Gerente"));
     }
 
     private static void removerFuncionario(String nome) {
@@ -72,12 +64,12 @@ public class Principal {
 
     private static void imprimirFuncionarios() {
         FUNCIONARIOS.forEach(funcionario -> {
-            System.out.println("Nome: " + funcionario.getNome() + " | Data Nascimento: "
-                    + funcionario.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                    + " | Salário: R$"
-                    + NumberFormat.getNumberInstance(new Locale("pt", "BR")).format(funcionario.getSalario())
-                    + " | Funcão: "
-                    + funcionario.getFuncao());
+            StringBuilder sb = new StringBuilder();
+            sb.append("Nome: ").append(funcionario.getNome())
+              .append(" | Data Nascimento: ").append(funcionario.getDataNascimento().format(DATE_FORMATTER))
+              .append(" | Salário: ").append(CURRENCY_FORMATTER.format(funcionario.getSalario()))
+              .append(" | Função: ").append(funcionario.getFuncao());
+            System.out.println(sb.toString());
         });
     }
 
@@ -97,52 +89,44 @@ public class Principal {
             System.out.println("Função: " + funcao);
             funcionarios.forEach(funcionario -> {
                 System.out.println("Nome: " + funcionario.getNome() + " | Data Nascimento: "
-                        + funcionario.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                        + " | Salário: R$"
-                        + NumberFormat.getNumberInstance(new Locale("pt", "BR")).format(funcionario.getSalario()));
+                    + funcionario.getDataNascimento().format(DATE_FORMATTER) + " | Salário: R$"
+                    + CURRENCY_FORMATTER.format(funcionario.getSalario()));
             });
         });
     }
 
     private static void imprimirAniversariantesMeses10e12() {
         FUNCIONARIOS.forEach(funcionario -> {
-            if (funcionario.getDataNascimento().getMonthValue() == 10
-                    || funcionario.getDataNascimento().getMonthValue() == 12) {
+            if (funcionario.getDataNascimento().getMonthValue() == 10 || funcionario.getDataNascimento().getMonthValue() == 12) {
                 System.out.println("Nome: " + funcionario.getNome() + " | Data Nascimento: "
-                        + funcionario.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                        + " | Salário: R$"
-                        + NumberFormat.getNumberInstance(new Locale("pt", "BR")).format(funcionario.getSalario())
-                        + " | Funcão: "
-                        + funcionario.getFuncao());
+                    + funcionario.getDataNascimento().format(DATE_FORMATTER) + " | Salário: R$"
+                    + CURRENCY_FORMATTER.format(funcionario.getSalario()) + " | Funcão: "
+                    + funcionario.getFuncao());
             }
         });
     }
 
     private static void imprimirFuncionarioMaiorIdade() {
-        Optional<Funcionario> funcionarioMaiorIdade = FUNCIONARIOS.stream().max(
-                Comparator.comparing(funcionario -> funcionario.getDataNascimento().until(LocalDate.now()).getYears()));
+        Optional<Funcionario> funcionarioMaiorIdade = FUNCIONARIOS.stream().max(Comparator.comparing(funcionario -> funcionario.getDataNascimento().until(LocalDate.now()).getYears()));
         funcionarioMaiorIdade.ifPresent(funcionario -> {
-            System.out.println("Nome: " + funcionario.getNome() + " | Idade: "
-                    + funcionario.getDataNascimento().until(LocalDate.now()).getYears());
+            System.out.println("Nome: " + funcionario.getNome() + " | Idade: " + funcionario.getDataNascimento().until(LocalDate.now()).getYears());
         });
     }
-
+    
     private static void imprimirFuncionariosOrdemAlfabetica() {
         FUNCIONARIOS.stream().sorted(Comparator.comparing(Funcionario::getNome)).forEach(funcionario -> {
-            System.out.println("Nome: " + funcionario.getNome() + " | Data Nascimento: "
-                    + funcionario.getDataNascimento().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))
-                    + " | Salário: R$"
-                    + NumberFormat.getNumberInstance(new Locale("pt", "BR")).format(funcionario.getSalario())
-                    + " | Funcão: "
-                    + funcionario.getFuncao());
+            StringBuilder sb = new StringBuilder();
+            sb.append("Nome: ").append(funcionario.getNome())
+              .append(" | Data Nascimento: ").append(funcionario.getDataNascimento().format(DATE_FORMATTER))
+              .append(" | Salário: ").append(CURRENCY_FORMATTER.format(funcionario.getSalario()))
+              .append(" | Função: ").append(funcionario.getFuncao());
+            System.out.println(sb.toString());
         });
     }
-
+    
     private static void imprimirTotalSalarios() {
-        BigDecimal totalSalarios = FUNCIONARIOS.stream().map(Funcionario::getSalario).reduce(BigDecimal.ZERO,
-                BigDecimal::add);
-        NumberFormat nf = NumberFormat.getNumberInstance(new Locale("pt", "BR"));
-        System.out.println("Total Salários: R$" + nf.format(totalSalarios));
+        BigDecimal totalSalarios = FUNCIONARIOS.stream().map(Funcionario::getSalario).reduce(BigDecimal.ZERO, BigDecimal::add);
+        System.out.println("Total Salários: R$" + CURRENCY_FORMATTER.format(totalSalarios));
     }
 
     private static void imprimirQuantosSalariosMinimosGanhaCadaFuncionario() {
